@@ -1,0 +1,41 @@
+<div class="form__container">
+  <h1 class="auth__title">Authorization</h1>
+  <form class="form" [formGroup]="authForm" (ngSubmit)="submit($event)">
+    <mat-form-field>
+      <mat-label>Enter your email</mat-label>
+      <input
+        matInput
+        placeholder="pat@example.com"
+        [formControl]="email"
+        required />
+      <mat-error>{{ getErrorMessageEmail() }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Enter your password</mat-label>
+      <input
+        matInput
+        [type]="hide ? 'password' : 'text'"
+        [formControl]="password"
+        required />
+      <mat-error>{{ getErrorMessagePassword() }}</mat-error>
+      <button
+        type="button"
+        mat-icon-button
+        matSuffix
+        (click)="hide = !hide"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide">
+        <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+    </mat-form-field>
+    <div class="footer__form">
+      <mat-checkbox color="primary">Remember me</mat-checkbox>
+      <button type="button" mat-button color="primary">
+        Forgot your password?
+      </button>
+    </div>
+
+    <button type="submit" mat-flat-button color="primary">Login</button>
+  </form>
+</div>
