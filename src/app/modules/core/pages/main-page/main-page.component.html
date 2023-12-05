@@ -1,0 +1,30 @@
+<app-header></app-header>
+<mat-sidenav-container autosize>
+  <mat-sidenav mode="side" opened="true">
+    <mat-nav-list>
+      <mat-list-item class="list__item" [routerLink]="'employees'">
+        <div class="list__item">
+          <mat-icon fontIcon="">badge</mat-icon>
+          <span *ngIf="isExpanded">{{ 'employees' | translate }}</span>
+        </div>
+      </mat-list-item>
+      <mat-list-item [routerLink]="'projects'">
+        <div class="list__item">
+          <mat-icon fontIcon="">work</mat-icon>
+          <span *ngIf="isExpanded">{{ 'projects' | translate }}</span>
+        </div>
+      </mat-list-item>
+    </mat-nav-list>
+    <button
+      mat-icon-button
+      class="btn__toggle"
+      (click)="isExpanded = !isExpanded"
+      [ngClass]="{ rotated: isExpanded }">
+      <mat-icon>menu_open</mat-icon>
+    </button>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <app-header-main-page></app-header-main-page>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

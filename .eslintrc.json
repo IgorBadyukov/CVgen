@@ -16,6 +16,9 @@
       },
       "plugins": ["import"],
       "rules": {
+        "@typescript-eslint/indent": "off",
+        "@typescript-eslint/brace-style": "off",
+        "@typescript-eslint/no-explicit-any": "off",
         "@angular-eslint/directive-selector": [
           "error",
           {

@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  width: 100%;
+  background: #ffffff;
+}
+
+.header__wrapper {
+  padding: 16px 24px;
+  .breadcrumbs__wrapper {
+    display: flex;
+    align-items: center;
+    .breadcrumbs__item {
+      color: #d9d9d9;
+      .span__separate {
+        margin: 0 8px 0 6px;
+      }
+      .breadcrumbs__link {
+        text-decoration: none;
+        &:visited {
+          color: #d9d9d9;
+        }
+      }
+    }
+  }
+  .page__title {
+    margin: 8px 0;
+  }
+  .page__subtitle {
+    margin: 0;
+  }
+}

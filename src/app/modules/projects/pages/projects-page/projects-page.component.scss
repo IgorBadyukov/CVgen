@@ -1,0 +1,17 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.wrapper__table {
+  margin: 20px 24px 0;
+  padding: 10px;
+  background: #ffffff;
+  height: 100%;
+  .wrapper__btn {
+    display: flex;
+    justify-content: end;
+    margin-bottom: 15px;
+  }
+}

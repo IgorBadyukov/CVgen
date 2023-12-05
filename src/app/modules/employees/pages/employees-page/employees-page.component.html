@@ -1,0 +1,9 @@
+<div class="wrapper__table">
+  <div class="wrapper__btn">
+    <button routerLink="add" class="add__btn" mat-raised-button color="primary">
+      {{ 'addEmployee' | translate }}
+    </button>
+  </div>
+
+  <app-table [dataTable]="employees" [headerTable]="column"></app-table>
+</div>

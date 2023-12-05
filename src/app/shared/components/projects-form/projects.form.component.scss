@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+  .project__form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+    & > * {
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 10px;
+    }
+  }
+}

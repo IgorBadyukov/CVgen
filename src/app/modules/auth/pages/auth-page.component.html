@@ -1,0 +1,27 @@
+<button class="btn__language" (click)="switchLanguage()">
+  <mat-icon fontIcon="language"></mat-icon>
+</button>
+<div class="form__container">
+  <h1 class="auth__title">{{ 'authTitle' | translate }}</h1>
+  <form class="form" [formGroup]="authForm" (ngSubmit)="submit($event)">
+    <app-input
+      formControlName="email"
+      label="emailInput"
+      type="email"></app-input>
+    <app-input
+      formControlName="password"
+      label="passwordInput"
+      type="password"></app-input>
+    <div class="footer__form">
+      <mat-checkbox color="primary">{{
+        'rememberBtn' | translate
+      }}</mat-checkbox>
+      <button type="button" mat-button color="primary">
+        {{ 'passwordForgot' | translate }}
+      </button>
+    </div>
+    <button type="submit" mat-flat-button color="primary">
+      {{ 'loginBtn' | translate }}
+    </button>
+  </form>
+</div>

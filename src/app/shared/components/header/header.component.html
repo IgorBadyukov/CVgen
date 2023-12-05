@@ -1,0 +1,18 @@
+<div class="header__container">
+  <div class="logo" [routerLink]="'employees'">
+    <mat-icon>diamond</mat-icon>
+    <span>CVGen</span>
+  </div>
+  <div class="header__tools">
+    <button class="button">
+      <mat-icon class="icon">search</mat-icon>
+    </button>
+    <button class="button">
+      <mat-icon class="icon" (click)="switchLanguage()">language</mat-icon>
+    </button>
+    <span>Igor</span>
+    <button class="button">
+      <mat-icon class="icon">logout</mat-icon>
+    </button>
+  </div>
+</div>

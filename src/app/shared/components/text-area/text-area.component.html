@@ -1,0 +1,10 @@
+<mat-form-field>
+  <textarea
+    matInput
+    placeholder="{{ label }}"
+    [formControl]="control"
+    (blur)="onTouched()"></textarea>
+  <mat-error *ngIf="(control.invalid && control?.dirty) || control?.touched">
+    {{ control.errors | resolveErrorMessage }}
+  </mat-error>
+</mat-form-field>

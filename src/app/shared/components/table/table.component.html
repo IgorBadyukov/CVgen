@@ -1,0 +1,16 @@
+<mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container *ngFor="let item of headerTable" [matColumnDef]="item.name">
+    <mat-header-cell *matHeaderCellDef>
+      {{ item.name | translate }}
+    </mat-header-cell>
+    <mat-cell class="mat__cell" *matCellDef="let element">
+      {{ element | keyValue: item.field | splitArray }}
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row
+    class="table__row"
+    *matRowDef="let row; columns: displayedColumns"
+    (click)="getRow(row)"></mat-row>
+</mat-table>

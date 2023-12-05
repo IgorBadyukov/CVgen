@@ -1,0 +1,34 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+mat-sidenav-container {
+  height: calc(100vh - 48px);
+  mat-sidenav {
+    height: 100%;
+    mat-nav-list {
+      mat-list-item {
+        .list__item {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          column-gap: 5px;
+        }
+      }
+    }
+    .btn__toggle {
+      position: absolute;
+      bottom: 16px;
+      left: 5px;
+      transition: 300ms ease-in-out;
+      transform: rotate(180deg);
+      &.rotated {
+        transform: rotate(0deg);
+      }
+    }
+  }
+  mat-sidenav-content {
+    min-height: 100vh;
+  }
+}
