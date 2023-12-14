@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IToken } from '../../shared/interfaces/token';
+import { IToken } from '../../interfaces/token';
+import { BASE_API_URL } from '../../constants/api';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
+export class AuthApiService {
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<IToken> {
     return this.http.post<IToken>(
-      'http://localhost:3000/api/auth/login/',
+      `${BASE_API_URL}auth/login`,
       {
         email,
         password,
@@ -21,6 +22,14 @@ export class AuthService {
   }
 
   logout(): Observable<unknown> {
-    return this.http.get('http://localhost:3000/api/auth/logout');
+    return this.http.get(`${BASE_API_URL}auth/logout`, {
+      withCredentials: true,
+    });
+  }
+
+  refreshToken(): Observable<IToken> {
+    return this.http.get<IToken>(`${BASE_API_URL}auth/refresh`, {
+      withCredentials: true,
+    });
   }
 }

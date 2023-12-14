@@ -2,10 +2,14 @@
   display: block;
   height: 100%;
   width: 100%;
+}
+
+form {
   .project__form {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    flex-direction: row;
+    align-items: start;
     gap: 20px;
     & > * {
       width: 100%;

@@ -1,28 +1,29 @@
-<form class="project__form" [formGroup]="projectForm">
-  <app-input formControlName="projectName" label="Project name"></app-input>
-  <app-input-date-picker
-    formControlName="startDate"
-    label="Start date"></app-input-date-picker>
-  <app-input-date-picker
-    formControlName="endDate"
-    label="End date"></app-input-date-picker>
-  <app-input formControlName="teamSize" label="Team size"></app-input>
-  <app-input-chips
-    label="Tech Stack"
-    [autocompleteOptions]="techStack"
-    [selectedOptions]="selectedTechStack"
-    formControlName="techStack"></app-input-chips>
-  <app-input-chips
-    label="Team Roles"
-    [autocompleteOptions]="roles"
-    [selectedOptions]="selectedRoles"
-    formControlName="roles"></app-input-chips>
-  <app-input-chips
-    label="Responsibilities"
-    [autocompleteOptions]="responsibilities"
-    [selectedOptions]="selectedResponsibilities"
-    formControlName="responsibilities"></app-input-chips>
-  <app-text-area
-    formControlName="description"
-    label="Description"></app-text-area>
+<form [formGroup]="form">
+  <div class="project__form">
+    <app-input formControlName="projectName" label="Project name"></app-input>
+    <app-input-date-picker
+      formControlName="startDate"
+      label="Start date"
+      [maxDate]="form.controls['endDate'].value"></app-input-date-picker>
+    <app-input-date-picker
+      formControlName="endDate"
+      label="End date"
+      [minDate]="form.controls['startDate'].value"></app-input-date-picker>
+    <app-input formControlName="teamSize" label="Team size"></app-input>
+    <app-input-chips
+      label="Tech Stack"
+      [autocompleteOptions]="techStack$ | async"
+      formControlName="techStack"></app-input-chips>
+    <app-input-chips
+      label="Team Roles"
+      [autocompleteOptions]="teamRoles$ | async"
+      formControlName="teamRoles"></app-input-chips>
+    <app-input-chips
+      label="Responsibilities"
+      [autocompleteOptions]="responsibilities$ | async"
+      formControlName="responsibilities"></app-input-chips>
+    <app-text-area
+      formControlName="description"
+      label="Description"></app-text-area>
+  </div>
 </form>

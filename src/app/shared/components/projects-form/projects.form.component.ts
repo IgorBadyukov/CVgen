@@ -1,9 +1,18 @@
-import { Component } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  DoCheck,
+  OnInit,
+  Optional,
+  Self,
+} from '@angular/core';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import {
+  ControlValueAccessor,
   FormControl,
   FormGroup,
   FormsModule,
+  NgControl,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -18,8 +27,25 @@ import { InputComponent } from '../input/input.component';
 import { InputDatePickerComponent } from '../input-date-picker/input-date-picker.component';
 import { InputChipsComponent } from '../input-chips/input-chips.component';
 import { TextAreaComponent } from '../text-area/text-area.component';
-import { dateRangeValidator, dateValidator } from '../../utils/dateValidator';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { dateValidatorMax } from '../../utils/dateValidatorMax';
+import { dateValidatorMin } from '../../utils/dateValidatorMin';
+import { distinctUntilChanged, Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import {
+  fetchResponsibilities,
+  fetchTeamRoles,
+  fetchTechStack,
+} from '../../../store/actions/core.action';
+import {
+  selectResponsibilities,
+  selectTeamRoles,
+  selectTechStack,
+} from '../../../store/selectors/core.selector';
 
+@UntilDestroy()
 @Component({
   selector: 'app-projects-form',
   standalone: true,
@@ -39,75 +65,111 @@ import { dateRangeValidator, dateValidator } from '../../utils/dateValidator';
     InputDatePickerComponent,
     InputChipsComponent,
     TextAreaComponent,
+    MatButtonModule,
+    RouterLink,
   ],
   templateUrl: './projects.form.component.html',
   styleUrl: './projects.form.component.scss',
 })
-export class ProjectsFormComponent {
-  public techStack: string[] = [
-    'Angular',
-    'React',
-    'Vue',
-    'Node.js',
-    'Express',
-    'MongoDB',
-  ];
+export class ProjectsFormComponent
+  implements ControlValueAccessor, OnInit, DoCheck
+{
+  public teamRoles$: Observable<string[]> = this.store.select(selectTeamRoles);
 
-  public selectedTechStack: string[] = ['Angular'];
+  public responsibilities$: Observable<string[]> = this.store.select(
+    selectResponsibilities,
+  );
 
-  public roles: string[] = [
-    'Frontend developer',
-    'Backend developer',
-    'DevOps',
-    'Manager HR',
-    'Testing',
-  ];
+  public techStack$: Observable<string[]> = this.store.select(selectTechStack);
 
-  public selectedRoles: string[] = [];
+  public form: FormGroup;
 
-  public responsibilities: string[] = ['Resp1', 'Resp2', 'Resp3'];
+  constructor(
+    @Self() @Optional() public ngControl: NgControl,
+    public readonly cdRef: ChangeDetectorRef,
+    private store: Store,
+  ) {
+    this.ngControl.valueAccessor = this;
+    this.form = new FormGroup({
+      projectName: new FormControl<string>('', [Validators.required]),
+      startDate: new FormControl<string>('', [Validators.required]),
+      endDate: new FormControl<string>('', [Validators.required]),
+      teamSize: new FormControl<number | null>(null, [
+        Validators.required,
+        Validators.min(0),
+        Validators.pattern(/^\d+$/),
+      ]),
+      techStack: new FormControl<string[]>([], [Validators.required]),
+      teamRoles: new FormControl<string[]>([], [Validators.required]),
+      responsibilities: new FormControl<string[]>([], [Validators.required]),
+      description: new FormControl<string>('', [
+        Validators.required,
+        Validators.minLength(12),
+        Validators.maxLength(250),
+      ]),
+    });
+  }
 
-  public selectedResponsibilities: string[] = [];
-
-  public projectForm: FormGroup;
-
-  constructor() {
-    this.projectForm = new FormGroup(
-      {
-        projectName: new FormControl<string>('', [Validators.required]),
-        startDate: new FormControl<string>('', [
+  ngOnInit(): void {
+    this.initControlValueChanges();
+    this.store.dispatch(fetchResponsibilities());
+    this.store.dispatch(fetchTechStack());
+    this.store.dispatch(fetchTeamRoles());
+    this.form.controls['startDate'].valueChanges
+      .pipe(distinctUntilChanged())
+      .subscribe(value => {
+        this.form.controls['endDate'].markAsTouched();
+        this.form.controls['endDate'].clearValidators();
+        this.form.controls['endDate'].addValidators([
           Validators.required,
-          dateValidator(),
-        ]),
-        endDate: new FormControl<string>('', [
+          dateValidatorMin(value),
+        ]);
+        this.form.controls['endDate'].updateValueAndValidity();
+      });
+    this.form.controls['endDate'].valueChanges
+      .pipe(distinctUntilChanged())
+      .subscribe(value => {
+        this.form.controls['startDate'].markAsTouched();
+        this.form.controls['startDate'].clearValidators();
+        this.form.controls['startDate'].addValidators([
           Validators.required,
-          dateValidator(),
-        ]),
-        teamSize: new FormControl<number | null>(null, [
-          Validators.required,
-          Validators.min(0),
-          Validators.pattern(/^\d+$/),
-        ]),
-        techStack: new FormControl<string[]>(this.selectedTechStack, [
-          Validators.required,
-        ]),
-        roles: new FormControl<string[]>(this.selectedRoles, [
-          Validators.required,
-        ]),
-        responsibilities: new FormControl<string[]>(
-          this.selectedResponsibilities,
-          [Validators.required],
-        ),
-        description: new FormControl<string>('', [
-          Validators.required,
-          Validators.minLength(12),
-          Validators.maxLength(250),
-        ]),
-      },
-      {
-        validators: [dateRangeValidator('startDate', 'endDate')],
-      },
-    );
-    this.projectForm.valueChanges.subscribe(console.log);
+          dateValidatorMax(value),
+        ]);
+        this.form.controls['startDate'].updateValueAndValidity();
+      });
+  }
+
+  ngDoCheck(): void {
+    if (this.form.invalid) {
+      this.ngControl.control.setErrors({ projectFormError: true });
+    }
+    if (this.ngControl.control?.touched) {
+      this.form.markAllAsTouched();
+      this.cdRef.markForCheck();
+    }
+  }
+
+  public onTouched: () => void;
+
+  public onChange: (value: string) => void;
+
+  public writeValue(obj: { [key: string]: string }): void {
+    this.form.setValue(obj, { emitEvent: false });
+    this.cdRef.detectChanges();
+  }
+
+  public registerOnChange(fn: (value: string) => void): void {
+    this.onChange = fn;
+  }
+
+  public registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  private initControlValueChanges(): void {
+    this.form.valueChanges.pipe(untilDestroyed(this)).subscribe(value => {
+      value.teamSize = Number(value.teamSize);
+      this.onChange(value);
+    });
   }
 }

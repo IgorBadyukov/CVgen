@@ -1,1 +1,9 @@
-<p>personal-project-page works!</p>
+<div class="wrapper__add-page">
+  <app-projects-form [formControl]="formControl"></app-projects-form>
+  <div class="wrapper__btn">
+    <button mat-raised-button routerLink="../">Cancel</button>
+    <button mat-raised-button (click)="changeProject()" color="primary">
+      Save
+    </button>
+  </div>
+</div>

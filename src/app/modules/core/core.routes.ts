@@ -4,14 +4,9 @@ import { ERoutes } from '../../shared/enums/routes';
 
 export const ROUTES_CORE: Routes = [
   {
-    path: ERoutes.EMPTY_ROUTE,
+    path: ERoutes.MAIN_ROUTE,
     component: MainPageComponent,
     children: [
-      {
-        path: ERoutes.EMPTY_ROUTE,
-        redirectTo: ERoutes.EMPLOYEES_ROUTE,
-        pathMatch: 'full',
-      },
       {
         path: ERoutes.EMPLOYEES_ROUTE,
         loadChildren: () =>
@@ -22,6 +17,7 @@ export const ROUTES_CORE: Routes = [
         loadChildren: () =>
           import('../projects/projects.routes').then(m => m.ROUTES_PROJECTS),
       },
+      { path: '**', redirectTo: ERoutes.EMPLOYEES_ROUTE },
     ],
   },
 ];

@@ -29,6 +29,11 @@ mat-sidenav-container {
     }
   }
   mat-sidenav-content {
-    min-height: 100vh;
+    .wrapper__content-page {
+      padding: 10px 20px;
+      margin: 20px;
+      background: #ffffff;
+      min-height: calc(100vh - 228px);
+    }
   }
 }

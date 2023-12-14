@@ -22,10 +22,11 @@
   "techStack": "Tech Stack",
   "responsibilities": "Responsibilities",
   "teamRoles": "Team Roles",
-  "main": "Main",
+  "main": "Home",
   "projectsList": "Projects List",
   "employeesList": "Employees List",
   "employeeAdd": "Add employee",
   "projectAdd": "Add Project",
-  "add": "Add"
+  "add": "Add",
+  "projectsInfo": "Project Info"
 }

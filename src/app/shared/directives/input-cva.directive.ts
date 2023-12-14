@@ -34,15 +34,15 @@ export class InputCvaDirective
     if (this.ngControl.control.errors !== this.control.errors) {
       this.initErrors();
     }
-    if (this.ngControl.control.dirty) {
-      this.control.markAsDirty();
+    if (this.ngControl.control.touched) {
+      this.control.markAsTouched();
     } else {
       this.control.markAsPristine();
     }
     this.cdRef.markForCheck();
   }
 
-  public onChange: (value: string) => void;
+  public onChange: (value: string | Date | null) => void;
 
   public onTouched: () => void;
 
@@ -51,7 +51,7 @@ export class InputCvaDirective
     this.cdRef.markForCheck();
   }
 
-  public registerOnChange(fn: (value: string) => void): void {
+  public registerOnChange(fn: (value: string | Date | null) => void): void {
     this.onChange = fn;
   }
 

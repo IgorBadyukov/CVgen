@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProjectsFormComponent } from '../../../../shared/components/projects-form/projects.form.component';
 import { TableComponent } from '../../../../shared/components/table/table.component';
-import { IProject } from '../../interfaces/project';
 import { MatButtonModule } from '@angular/material/button';
 import { IHeaderTable } from '../../../../shared/interfaces/headerTable';
 import { Store } from '@ngrx/store';
@@ -10,12 +9,16 @@ import {
   setBreadCrumbs,
   setPageTitle,
 } from '../../../../store/actions/route.action';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import {
   PROJECTS_BREADCRUMBS,
   PROJECTS_PAGE_TITLE,
 } from '../../constants/breadcrumbs';
+import { selectProjects } from '../../../../store/selectors/projects.selector';
+import { fetchProjects } from '../../../../store/actions/projects.action';
+import { header } from '../../constants/headerTable';
+import { ERoutes } from '../../../../shared/enums/routes';
 
 @Component({
   selector: 'app-projects-page',
@@ -33,68 +36,14 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsPageComponent implements OnInit {
-  public header: IHeaderTable[] = [
-    {
-      name: 'projectName',
-      field: 'projectName',
-    },
-    {
-      name: 'description',
-      field: 'description',
-    },
-    {
-      name: 'startDate',
-      field: 'startDate',
-    },
-    {
-      name: 'endDate',
-      field: 'endDate',
-    },
-    {
-      name: 'teamSize',
-      field: 'teamSize',
-    },
-    {
-      name: 'techStack',
-      field: 'techStack',
-    },
-    {
-      name: 'responsibilities',
-      field: 'responsibilities',
-    },
-    {
-      name: 'teamRoles',
-      field: 'teamRoles',
-    },
-  ];
+  protected readonly header: IHeaderTable[] = header;
 
-  public projects: IProject[] = [
-    {
-      id: 1,
-      projectName: 'CVgen',
-      description:
-        'This project designed for better working and makeing specific cv for future project',
-      startDate: '05/12/2023',
-      endDate: '12/12/2023',
-      teamSize: 3,
-      techStack: ['Angular', 'NestJS'],
-      responsibilities: ['Frontend', 'Backend'],
-      teamRoles: ['Programmers', 'Manager'],
-    },
-    {
-      id: 2,
-      projectName: 'CVgen',
-      description: 'something...........vef',
-      startDate: '05/12/2023',
-      endDate: '12/12/2023',
-      teamSize: 3,
-      techStack: ['Angular', 'NestJS'],
-      responsibilities: ['Frontend', 'Backend'],
-      teamRoles: ['Programmers', 'Manager'],
-    },
-  ];
+  public projects$ = this.store.select(selectProjects);
 
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    private route: Router,
+  ) {}
 
   ngOnInit() {
     this.store.dispatch(
@@ -107,5 +56,12 @@ export class ProjectsPageComponent implements OnInit {
         title: PROJECTS_PAGE_TITLE,
       }),
     );
+    this.store.dispatch(fetchProjects());
+  }
+
+  choseProject(projectID: number) {
+    this.route.navigate([
+      ERoutes.MAIN_ROUTE + '/' + ERoutes.PROJECTS_ROUTE + '/' + projectID,
+    ]);
   }
 }

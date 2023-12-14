@@ -5,7 +5,7 @@ import { AddEmployeePageComponent } from './pages/add-employee-page/add-employee
 import { ERoutes } from '../../shared/enums/routes';
 
 export const ROUTES_EMPLOYEES: Routes = [
-  { path: ERoutes.EMPTY_ROUTE, component: EmployeesPageComponent },
+  { path: ERoutes.MAIN_ROUTE, component: EmployeesPageComponent },
   { path: ERoutes.ADDING_ROUTE, component: AddEmployeePageComponent },
   { path: ERoutes.ID_ROUTE, component: PersonalEmployeePageComponent },
 ];

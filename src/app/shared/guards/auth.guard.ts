@@ -1,17 +1,25 @@
-import { CanActivateFn, Router } from '@angular/router';
+import { CanLoadFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
-import { ERoutes } from '../enums/routes';
+import { AuthService } from '../services/auth.service';
 
-export const authGuard: CanActivateFn = () => {
-  const cookie = inject(CookieService);
+export const authGuardMain: CanLoadFn = () => {
   const router = inject(Router);
-  const accessToken = cookie.get('access_token');
-
-  if (accessToken) {
+  const isAuth = inject(AuthService).isAuth();
+  console.log('auth guard main');
+  if (isAuth) {
     return true;
-  } else {
-    router.navigate([ERoutes.AUTH_ROUTE]);
-    return false;
   }
+  router.navigate(['auth']);
+  return false;
+};
+
+export const authGuard: CanLoadFn = () => {
+  const router = inject(Router);
+  const isAuth = inject(AuthService).isAuth();
+  console.log('auth guard');
+  if (!isAuth) {
+    return true;
+  }
+  router.navigate(['']);
+  return false;
 };

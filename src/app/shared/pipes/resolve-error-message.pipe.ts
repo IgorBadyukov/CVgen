@@ -7,6 +7,7 @@ import { ERROR_MESSAGES } from '../constants/error-messages';
 })
 export class ResolveErrorMessagePipe implements PipeTransform {
   transform(errors: ValidationErrors): string {
+    console.log(errors);
     return ERROR_MESSAGES[Object.keys(errors)[0]];
   }
 }

@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IEmployee } from '../../interfaces/employee';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { MatButtonModule } from '@angular/material/button';
 import { IHeaderTable } from '../../../../shared/interfaces/headerTable';
@@ -15,6 +14,9 @@ import {
   EMPLOYEES_BREADCRUMBS,
   EMPLOYEES_PAGE_TITLE,
 } from '../../constants/breadcrumbs';
+import { EmployeesApiService } from '../../../../shared/services/api/employees.api.service';
+import { selectEmployees } from '../../../../store/selectors/employees.selector';
+import { fetchEmployees } from '../../../../store/actions/employees.action';
 
 @Component({
   selector: 'app-employees-page',
@@ -31,40 +33,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeesPageComponent implements OnInit {
-  public employees: IEmployee[] = [
-    {
-      id: 1,
-      firstName: 'Igor',
-      lastName: 'Badyukov',
-      email: 'xxx@gmail.com',
-      department: {
-        id: 1,
-        name: 'Forontend',
-      },
-      specialization: {
-        id: 2,
-        name: 'Angular',
-      },
-      departmentId: 1,
-      specializationId: 2,
-    },
-    {
-      id: 1,
-      firstName: 'Igor',
-      lastName: 'Badyukov',
-      email: 'xxx@gmail.com',
-      department: {
-        id: 1,
-        name: 'Forontend',
-      },
-      specialization: {
-        id: 2,
-        name: 'Angular',
-      },
-      departmentId: 1,
-      specializationId: 2,
-    },
-  ];
+  $employees = this.store.select(selectEmployees);
 
   public column: IHeaderTable[] = [
     {
@@ -89,7 +58,10 @@ export class EmployeesPageComponent implements OnInit {
     },
   ];
 
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    private employeesService: EmployeesApiService,
+  ) {}
 
   ngOnInit() {
     this.store.dispatch(
@@ -102,5 +74,6 @@ export class EmployeesPageComponent implements OnInit {
         title: EMPLOYEES_PAGE_TITLE,
       }),
     );
+    this.store.dispatch(fetchEmployees());
   }
 }

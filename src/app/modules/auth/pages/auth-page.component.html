@@ -3,12 +3,14 @@
 </button>
 <div class="form__container">
   <h1 class="auth__title">{{ 'authTitle' | translate }}</h1>
-  <form class="form" [formGroup]="authForm" (ngSubmit)="submit($event)">
+  <form class="form" [formGroup]="authForm">
     <app-input
+      class="input__control"
       formControlName="email"
       label="emailInput"
       type="email"></app-input>
     <app-input
+      class="input__control"
       formControlName="password"
       label="passwordInput"
       type="password"></app-input>
@@ -20,7 +22,7 @@
         {{ 'passwordForgot' | translate }}
       </button>
     </div>
-    <button type="submit" mat-flat-button color="primary">
+    <button (click)="submit()" mat-flat-button color="primary">
       {{ 'loginBtn' | translate }}
     </button>
   </form>

@@ -1,8 +1,14 @@
+<script src="projects-page.component.ts"></script>
 <div class="wrapper__table">
   <div class="wrapper__btn">
     <button routerLink="add" class="add__btn" mat-raised-button color="primary">
       {{ 'addProject' | translate }}
     </button>
   </div>
-  <app-table [dataTable]="projects" [headerTable]="header"></app-table>
+  <div class="table__wrapper">
+    <app-table
+      (clickRowTable)="choseProject($event)"
+      [dataTable]="projects$ | async"
+      [headerTable]="header"></app-table>
+  </div>
 </div>

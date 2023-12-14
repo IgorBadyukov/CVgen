@@ -5,7 +5,7 @@ export interface IProject {
   startDate: string;
   endDate: string;
   teamSize: number;
-  techStack: string[];
-  responsibilities: string[];
-  teamRoles: string[];
+  techStack: { id: number; name: string }[];
+  responsibilities: { id: number; name: string }[];
+  teamRoles: { id: number; name: string }[];
 }

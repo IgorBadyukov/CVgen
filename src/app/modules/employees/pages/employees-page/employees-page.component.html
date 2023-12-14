@@ -4,6 +4,9 @@
       {{ 'addEmployee' | translate }}
     </button>
   </div>
-
-  <app-table [dataTable]="employees" [headerTable]="column"></app-table>
+  <div class="table__wrapper">
+    <app-table
+      [dataTable]="$employees | async"
+      [headerTable]="column"></app-table>
+  </div>
 </div>

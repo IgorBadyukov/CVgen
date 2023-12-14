@@ -1,8 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
+  OnChanges,
   OnInit,
+  Output,
+  SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -25,21 +29,28 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TableComponent<T> implements OnInit {
+export class TableComponent<T> implements OnInit, OnChanges {
   @Input() dataTable: T[] = [];
 
   @Input() headerTable: IHeaderTable[] = [];
+
+  @Output() clickRowTable = new EventEmitter<number>();
 
   public dataSource: MatTableDataSource<T>;
 
   public displayedColumns: string[] = [];
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['dataTable'] && changes['dataTable'].currentValue) {
+      this.dataSource = new MatTableDataSource<T>(this.dataTable);
+    }
+  }
+
   ngOnInit(): void {
-    this.dataSource = new MatTableDataSource<T>(this.dataTable);
     this.displayedColumns.push(...this.headerTable.map(item => item.name));
   }
 
-  public getRow(data: string) {
-    console.log(data);
+  public getRow(id: number): void {
+    this.clickRowTable.emit(id);
   }
 }

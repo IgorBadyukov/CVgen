@@ -1,10 +1,11 @@
-<mat-form-field>
+<mat-form-field class="wrapper__control">
   <mat-label>{{ label }}</mat-label>
   <input
     matInput
     [matDatepicker]="picker"
-    [formControl]="control"
-    (dateChange)="initControlValueChanges()" />
+    [min]="minDate"
+    [max]="maxDate"
+    [formControl]="control" />
   <mat-hint>MM/DD/YYYY</mat-hint>
   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
   <mat-datepicker #picker></mat-datepicker>

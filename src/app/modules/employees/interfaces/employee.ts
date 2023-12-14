@@ -1,3 +1,5 @@
+import { ICV } from '../../../shared/interfaces/cv';
+
 export interface IEmployee {
   id: number;
   firstName: string;
@@ -13,4 +15,5 @@ export interface IEmployee {
   };
   departmentId: number;
   specializationId: number;
+  cvs: ICV[];
 }

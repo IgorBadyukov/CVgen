@@ -12,5 +12,5 @@
   <mat-row
     class="table__row"
     *matRowDef="let row; columns: displayedColumns"
-    (click)="getRow(row)"></mat-row>
+    (click)="getRow(row.id)"></mat-row>
 </mat-table>

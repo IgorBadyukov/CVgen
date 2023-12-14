@@ -6,4 +6,6 @@ export const ERROR_MESSAGES: { [key: string]: string } = {
   pattern: 'Error in pattern',
   required: 'Field required',
   email: 'Invalid email',
+  matDatepickerMin: 'Date must be greater than start date',
+  matDatepickerMax: 'Date must be lower than end date',
 };

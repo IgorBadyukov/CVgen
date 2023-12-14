@@ -5,7 +5,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { AuthService } from '../auth.service';
+import { AuthApiService } from '../../../shared/services/api/auth.api.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,12 +16,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ELanguage } from '../../../shared/enums/language';
 import { InputComponent } from '../../../shared/components/input/input.component';
-import { CookieService } from 'ngx-cookie-service';
-import { Router } from '@angular/router';
-import { ERoutes } from '../../../shared/enums/routes';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { AuthService } from '../../../shared/services/auth.service';
 
-@UntilDestroy()
 @Component({
   selector: 'app-auth',
   templateUrl: './auth-page.component.html',
@@ -39,17 +35,15 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
     TranslateModule,
     InputComponent,
   ],
-  providers: [AuthService, TranslateService],
+  providers: [AuthApiService, TranslateService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthPageComponent {
   public authForm: FormGroup;
 
   constructor(
-    private authService: AuthService,
     private translateService: TranslateService,
-    private cookieService: CookieService,
-    private router: Router,
+    private authService: AuthService,
   ) {
     this.authForm = new FormGroup({
       email: new FormControl<string>('', [
@@ -72,19 +66,14 @@ export class AuthPageComponent {
     this.translateService.use(newLanguage);
   }
 
-  submit($event: Event): void {
-    $event.preventDefault();
-    if (!this.authForm.invalid) {
-      this.authService
-        .login(
-          this.authForm.get('email').value,
-          this.authForm.get('password').value,
-        )
-        .pipe(untilDestroyed(this))
-        .subscribe(value => {
-          this.cookieService.set('access_token', value.access_token);
-          this.router.navigate([ERoutes.MAIN_ROUTE]);
-        });
+  submit(): void {
+    if (this.authForm.invalid) {
+      this.authForm.markAllAsTouched();
+      return;
     }
+    this.authService.login(
+      this.authForm.get('email').value,
+      this.authForm.get('password').value,
+    );
   }
 }

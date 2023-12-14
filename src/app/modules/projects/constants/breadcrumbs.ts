@@ -3,11 +3,11 @@ import { ERoutes } from '../../../shared/enums/routes';
 
 export const PROJECTS_BREADCRUMBS: IBreadCrumbs = {
   label: 'projects',
-  routerLink: ERoutes.EMPLOYEES_ROUTE,
+  routerLink: ERoutes.PROJECTS_ROUTE,
 };
 export const PROJECT_ADD_BREADCRUMBS: IBreadCrumbs = {
   label: 'add',
-  routerLink: ERoutes.EMPLOYEES_ROUTE + '/' + ERoutes.ADDING_ROUTE,
+  routerLink: ERoutes.PROJECTS_ROUTE + '/' + ERoutes.ADDING_ROUTE,
 };
 export const PROJECTS_PAGE_TITLE: IPageTitle = {
   pageTitle: 'projects',
@@ -15,5 +15,10 @@ export const PROJECTS_PAGE_TITLE: IPageTitle = {
 };
 export const PROJECT_ADD_PAGE_TITLE: IPageTitle = {
   pageTitle: 'projects',
-  pageSubtitle: 'projectsAdd',
+  pageSubtitle: 'projectAdd',
+};
+
+export const PROJECT_EDIT_PAGE_TITLE: IPageTitle = {
+  pageTitle: 'projects',
+  pageSubtitle: 'projectsInfo',
 };

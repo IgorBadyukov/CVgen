@@ -1,24 +1,20 @@
 import { Routes } from '@angular/router';
-import { ErrorPageComponent } from './shared/pages/error-page/error-page.component';
 import { ERoutes } from './shared/enums/routes';
-import { authGuard } from './shared/guards/auth.guard';
+import { AuthService } from './shared/services/auth.service';
+import { inject } from '@angular/core';
 
 export const ROUTES: Routes = [
   {
-    path: ERoutes.EMPTY_ROUTE,
-    redirectTo: ERoutes.AUTH_ROUTE,
-    pathMatch: 'full',
+    path: ERoutes.MAIN_ROUTE,
+    loadChildren: () =>
+      import('./modules/core/core.routes').then(m => m.ROUTES_CORE),
+    canMatch: [() => inject(AuthService).isAuth()],
   },
   {
     path: ERoutes.AUTH_ROUTE,
     loadChildren: () =>
       import('./modules/auth/auth.routes').then(m => m.ROUTES_AUTH),
+    canMatch: [() => !inject(AuthService).isAuth()],
   },
-  {
-    path: ERoutes.MAIN_ROUTE,
-    loadChildren: () =>
-      import('./modules/core/core.routes').then(m => m.ROUTES_CORE),
-    canActivate: [authGuard],
-  },
-  { path: ERoutes.ERROR_ROUTE, component: ErrorPageComponent },
+  { path: '**', redirectTo: ERoutes.MAIN_ROUTE },
 ];
